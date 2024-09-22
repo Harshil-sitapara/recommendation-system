@@ -1,9 +1,10 @@
-import { action, internalAction, internalQuery } from "./_generated/server";
+import { action, internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 import { embed } from '../src/lib/embed'
 import { internal } from './_generated/api'
 import { Doc } from "./_generated/dataModel";
 
+//NOTE - fetch single video
 export const fetchVideosData = internalQuery({
     args: {
         ids: v.array(v.id("videos"))
@@ -41,6 +42,34 @@ export const similarVideos = action({
     }
 })
 
+//NOTE - Mutation to insert video
+export const insertVideo = internalMutation({
+    args: {
+        title: v.string(),
+        description: v.string(),
+        videoUrl: v.string(),
+        thumbnailUrl: v.string(),
+        category: v.string(),
+        embeddings: v.array(v.float64())
+    }, handler(ctx, args) {
+        if (!args.title || !args.description || !args.videoUrl || !args.thumbnailUrl || !args.category) {
+            throw new Error("All fields are required")
+        };
+
+        const video = ctx.db.insert("videos", {
+            title: args.title,
+            description: args.description,
+            videoUrl: args.videoUrl,
+            thumbnailUrl: args.thumbnailUrl,
+            category: args.category,
+            embeddings: args.embeddings
+        })
+
+        return video;
+    }
+})
+
+//NOTE - Add new video
 export const addVideo = action({
     args: {
         title: v.string(),
@@ -50,11 +79,29 @@ export const addVideo = action({
         category: v.string(),
     },
     handler: async (ctx, args) => {
-        //checks
+        //Checks
         if (!args.title || !args.description || !args.videoUrl || !args.thumbnailUrl || !args.category) {
             throw new Error("All fields are required")
         };
         const embedding = await embed(args.title);
-        //TODO - insert this embeddings in DB
+        //TODO - Insert embeddings in DB
+        await ctx.runMutation(internal.videos.insertVideo, {
+            title: args.title,
+            description: args.description,
+            videoUrl: args.videoUrl,
+            thumbnailUrl: args.thumbnailUrl,
+            category: args.category,
+            embeddings: embedding
+        })
+        return true;
+    }
+})
+
+//NOTE - Query to fetch all videos
+export const fetchAllVideos = internalQuery({
+    args: {},
+    handler: async (ctx) => {
+        const results = await ctx.db.query("videos").collect();
+        return results;
     }
 })

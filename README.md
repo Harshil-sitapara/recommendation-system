@@ -1,2 +1,2 @@
 
-## Custom recommendation system using convex vector search DB
+## Custom Recommendation System with Convex Vector Search and Voyage AI

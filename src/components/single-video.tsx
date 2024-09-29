@@ -9,10 +9,11 @@ import { api } from '../../convex/_generated/api'
 import { Id } from '../../convex/_generated/dataModel'
 import { useEffect, useState } from 'react'
 import { Skeleton } from './ui/skeleton'
+import { Video as VideoType } from '@/app/types/video-types'
 
 export default function Video({ id }: { id: Id<"videos"> }): JSX.Element {
     const videoData = useQuery(api.videos.fetchVideo, { id })
-    const [similarVideosData, setSimilarVideosData] = useState<Array<any>>();
+    const [similarVideosData, setSimilarVideosData] = useState<Array<VideoType>>();
     const [loading, setLoading] = useState<boolean>(false);
     const similarVideos = useAction(api.videos.similarVideos)
     const router = useRouter();
@@ -43,7 +44,7 @@ export default function Video({ id }: { id: Id<"videos"> }): JSX.Element {
 
     function isYoutubeURL(): boolean {
         if (videoData?.videoUrl) {
-            var regExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+            const regExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
             if (videoData?.videoUrl.match(regExp)) {
                 return true;
             }
@@ -108,7 +109,7 @@ export default function Video({ id }: { id: Id<"videos"> }): JSX.Element {
                                 </Card>
                             ))}
                         </div> : (similarVideosData?.length == 1 || similarVideosData?.length == 0 || !similarVideosData) ? <div>No videos</div> : similarVideosData?.map((video) => (
-                            <Card key={video.id} className="overflow-hidden cursor-pointer" onClick={() => router.push(`/video/${video._id}`)}>
+                            <Card key={video._id} className="overflow-hidden cursor-pointer" onClick={() => router.push(`/video/${video._id}`)}>
                                 <div className="flex">
                                     <div className="relative w-1/3 aspect-video">
                                         <Image

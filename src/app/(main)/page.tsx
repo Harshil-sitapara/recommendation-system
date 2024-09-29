@@ -6,21 +6,11 @@ import { useAction, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { SearchInput } from "@/components/ui/search-input";
+import { Video } from "../types/video-types";
 
-export interface Video {
-  _id: Id<"videos">;
-  _creationTime: number;
-  title: string;
-  description: string;
-  videoUrl: string;
-  thumbnailUrl: string;
-  category: string;
-  embeddings: number[];
-}
 
 export default function Home() {
   const router = useRouter();
@@ -47,6 +37,7 @@ export default function Home() {
           setFilteredData(data);
         });
       })
+      
     } catch (error: any) {
       console.error(error.message);
     }

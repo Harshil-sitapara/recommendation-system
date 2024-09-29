@@ -45,7 +45,7 @@ export function AddVideo() {
         toast.success("Video added successfully", { position: "top-center" })
       })
       form.reset()
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   }

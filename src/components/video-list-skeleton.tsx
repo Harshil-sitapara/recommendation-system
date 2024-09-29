@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function VideoListSkeleton() {

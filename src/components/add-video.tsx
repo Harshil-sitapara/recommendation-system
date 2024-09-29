@@ -39,14 +39,15 @@ export function AddVideo() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    startAdding(() => {
-      addVideo(values).then(() => {
-        toast.success("Video added");
-      }).catch((error) => {
-        toast.error(error.message);
+    try {
+      startAdding(async () => {
+        await addVideo(values);
+        toast.success("Video added successfully", { position: "top-center" })
       })
-    })
-    form.reset()
+      form.reset()
+    } catch (error:any) {
+      toast.error(error.message);
+    }
   }
 
   return (

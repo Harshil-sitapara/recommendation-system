@@ -1,10 +1,10 @@
-import { action, internalMutation, internalQuery } from "./_generated/server";
+import { action, internalMutation, internalQuery, query } from "./_generated/server";
 import { v } from "convex/values";
 import { embed } from '../src/lib/embed'
 import { internal } from './_generated/api'
 import { Doc } from "./_generated/dataModel";
 
-//NOTE - fetch single video
+//NOTE - fetch videos by ids
 export const fetchVideosData = internalQuery({
     args: {
         ids: v.array(v.id("videos"))
@@ -28,7 +28,6 @@ export const similarVideos = action({
     handler: async (ctx, args) => {
         //NOTE - convert query to embeddings
         const queryEmbeddings = await embed(args.query);
-
         const result = await ctx.vectorSearch("videos", "by_search", {
             vector: queryEmbeddings,
             limit: 5
@@ -98,10 +97,19 @@ export const addVideo = action({
 })
 
 //NOTE - Query to fetch all videos
-export const fetchAllVideos = internalQuery({
+export const fetchAllVideos = query({
     args: {},
     handler: async (ctx) => {
         const results = await ctx.db.query("videos").collect();
         return results;
+    }
+})
+
+//NOTE - Fetch video by id
+export const fetchVideo = query({
+    args: { id: v.id("videos") },
+    handler: async (ctx, args) => {
+        const doc = await ctx.db.get(args.id);
+        return doc;
     }
 })

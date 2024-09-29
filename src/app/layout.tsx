@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { ConvexProvider } from "convex/react";
 import { ConvexClientProvider } from "./providers/ConvexClientProvider";
+import Link from "next/link";
+import { Github } from "lucide-react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,12 +28,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-full`}
       >
         <ConvexClientProvider>
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
+          <footer className="py-4 px-6 border-t bg-background">
+            <div className="container mx-auto flex justify-between items-center">
+              <p className="text-sm text-muted-foreground">
+                © {new Date().getFullYear()} Recommendation System
+              </p>
+              <Link
+                href="https://github.com/yourusername/yourrepository"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="View source on GitHub"
+              >
+                <Github className="w-6 h-6" />
+              </Link>
+            </div>
+          </footer>
           <Toaster />
         </ConvexClientProvider>
       </body>

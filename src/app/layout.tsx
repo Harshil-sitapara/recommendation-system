@@ -42,7 +42,7 @@ export default function RootLayout({
                 © {new Date().getFullYear()} Recommendation System
               </p>
               <Link
-                href="https://github.com/yourusername/yourrepository"
+                href="https://github.com/Harshil-sitapara/recommendation-system"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"

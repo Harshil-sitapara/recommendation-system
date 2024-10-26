@@ -82,7 +82,8 @@ export const addVideo = action({
         if (!args.title || !args.description || !args.videoUrl || !args.thumbnailUrl || !args.category) {
             throw new Error("All fields are required")
         };
-        const embedding = await embed(args.title);
+        const combinedText = `${args.title} ${args.description} ${args.category}`;
+        const embedding = await embed(combinedText);
         //TODO - Insert embeddings in DB
         await ctx.runMutation(internal.videos.insertVideo, {
             title: args.title,
